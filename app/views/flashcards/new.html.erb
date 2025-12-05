@@ -1,4 +1,25 @@
-<div>
-  <h1 class="font-bold text-4xl">Flashcards#new</h1>
-  <p>Find me in app/views/flashcards/new.html.erb</p>
+<div class="max-w-6xl min-w-[640px] mx-auto px-6 py-12 bg-gray-50">
+  <h1 class="text-2xl font-bold mb-6 text-green-800">
+    <%= action_name.capitalize %> Flashcard in "<%= @deck.name %>"
+  </h1>
+
+  <%= form_with model: [@deck, @flashcard], local: true do |f| %>
+    <div class="mb-6">
+      <%= f.label :front, "Question", class: "block mb-2 font-semibold text-gray-700" %>
+      <%= f.text_area :front, class: "w-full p-3 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-green-300", rows: 3 %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :back, "Answer", class: "block mb-2 font-semibold text-gray-700" %>
+      <%= f.text_area :back, class: "w-full p-3 border rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-green-300", rows: 3 %>
+    </div>
+
+    <div class="flex space-x-2">
+      <%= f.submit "#{action_name.capitalize} Flashcard",
+            class: "px-4 py-2 bg-green-200 hover:bg-green-300 rounded font-semibold" %>
+
+      <%= link_to "Back to Deck", deck_path(@deck),
+            class: "px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded font-semibold" %>
+    </div>
+  <% end %>
 </div>

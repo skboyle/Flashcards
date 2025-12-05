@@ -1,4 +1,54 @@
-<div>
-  <h1 class="font-bold text-4xl">QuizAttempts#show</h1>
-  <p>Find me in app/views/quiz_attempts/show.html.erb</p>
+<div class="max-w-3xl w-full min-w-[640px] mx-auto p-6 bg-gray-50">
+
+  <% percent = ((@current_index.to_f / @flashcards.length) * 100).round %>
+
+  <div class="flex items-center justify-between mb-4">
+    <div class="flex-1 mr-4 bg-gray-200 rounded-full h-4">
+      <div class="bg-green-400 h-4 rounded-full transition-all duration-300" style="width: <%= percent %>%"></div>
+    </div>
+
+    <h2 class="text-xl font-bold text-green-800">
+      <%= @current_index + 1 %> / <%= @flashcards.length %>
+    </h2>
+  </div>
+
+  <div class="p-6 mb-4 border rounded bg-white min-h-[150px] flex flex-col justify-center">
+    <p class="flashcard-front text-base"><%= @flashcard.front %></p>
+
+    <p class="flashcard-back hidden mt-4 text-base"><%= @flashcard.back %></p>
+  </div>
+
+  <button class="reveal-btn px-4 py-2 bg-green-200 hover:bg-green-300 rounded mb-4">
+    Reveal Answer
+  </button>
+
+  <div class="answer-buttons hidden flex space-x-2 mt-2">
+    <%= button_to "Got it", deck_quiz_attempt_quiz_attempt_scores_path(@deck, @attempt, flashcard_id: @flashcard.id, status: "got_it"),
+          method: :post,
+          form: { "data-turbo" => "false" },
+          class: "px-4 py-2 bg-green-100 hover:bg-green-200 rounded flex-1 text-center" %>
+
+    <%= button_to "Needs practice", deck_quiz_attempt_quiz_attempt_scores_path(@deck, @attempt, flashcard_id: @flashcard.id, status: "needs_practice"),
+          method: :post,
+          form: { "data-turbo" => "false" },
+          class: "px-4 py-2 bg-red-100 hover:bg-red-200 rounded flex-1 text-center" %>
+  </div>
+
 </div>
+
+<script type="module">
+  document.addEventListener("turbo:load", () => {
+    const revealBtn = document.querySelector(".reveal-btn");
+    const back = document.querySelector(".flashcard-back");
+    const answerButtons = document.querySelector(".answer-buttons");
+
+    if (!revealBtn || !back || !answerButtons) return;
+
+    revealBtn.addEventListener("click", () => {
+      back.classList.remove("hidden");
+      revealBtn.classList.add("hidden");
+      answerButtons.classList.remove("hidden");
+    });
+  });
+</script>
+

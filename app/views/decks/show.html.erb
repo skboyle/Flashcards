@@ -1,4 +1,54 @@
-<div>
-  <h1 class="font-bold text-4xl">Decks#show</h1>
-  <p>Find me in app/views/decks/show.html.erb</p>
+<div class="max-w-6xl min-w-[640px] mx-auto px-6 py-12 bg-gray-50">
+  <h1 class="text-2xl font-bold mb-4 text-green-800"><%= @deck.name %></h1>
+
+  <% if flash[:notice] %>
+    <div class="p-4 mb-6 bg-green-100 rounded shadow">
+      <p><%= flash[:notice] %></p>
+      <% last_attempt = @deck.quiz_attempts.order(created_at: :desc).first %>
+      <% if last_attempt %>
+        <p>Score: <%= last_attempt.correct_count %> / <%= last_attempt.total_count %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <div class="p-4 mb-6 bg-green-50 rounded shadow">
+    <h3 class="mt-2 font-semibold">Past Attempts:</h3>
+    <div class="space-y-1">
+      <% @deck.quiz_attempts.order(created_at: :desc).limit(10).each do |attempt| %>
+        <% percent = attempt.total_count.to_i > 0 ? ((attempt.correct_count.to_f / attempt.total_count.to_i) * 100).round : 0 %>
+        <div>
+          <%= attempt.created_at.strftime("%b %d, %Y") %>: 
+          <%= attempt.correct_count %> / <%= attempt.total_count %> (<%= percent %>%)
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <h2 class="text-xl font-semibold mb-4">Flashcards</h2>
+  <ul class="mb-6 space-y-4">
+    <% @flashcards.each do |f| %>
+      <li class="p-4 bg-white shadow rounded flex justify-between items-center min-h-[60px]">
+        <span class="text-base font-medium"><%= f.front.truncate(50) %></span>
+        <span class="space-x-2 flex">
+          <%= link_to "Edit", edit_deck_flashcard_path(@deck, f),
+                class: "px-4 py-2 bg-blue-200 hover:bg-blue-300 rounded text-sm font-semibold" %>
+          <%= button_to "Delete", deck_flashcard_path(@deck, f),
+                method: :delete,
+                class: "px-4 py-2 bg-red-200 hover:bg-red-300 rounded text-sm font-semibold" %>
+        </span>
+      </li>
+    <% end %>
+  </ul>
+
+  <div class="flex space-x-2 mt-4">
+    <%= link_to "Add Flashcard", new_deck_flashcard_path(@deck),
+          class: "px-4 py-2 bg-green-200 hover:bg-green-300 rounded font-semibold" %>
+
+    <%= button_to "Start Quiz", deck_quiz_attempts_path(@deck),
+          method: :post,
+          class: "px-4 py-2 bg-green-300 hover:bg-green-400 rounded font-semibold" %>
+
+    <%= link_to "Home", root_path,
+          class: "px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded font-semibold" %>
+  </div>
 </div>

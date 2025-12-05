@@ -1,24 +1,24 @@
-# README
+# Flashcards App
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A simple Rails 8 application for practicing flashcards with decks, quiz attempts, and scoring.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- Create decks and add flashcards
+- Study decks with “Reveal Answer” and mark as “Got it” or “Needs practice”
+- Tracks correct and total counts for each quiz attempt
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Setup
+# Install dependencies
+```
+bundle install
+yarn install
+```
+# Set up the database
+```
+rails db:create db:migrate db:seed
+```
+# Run the server
+```
+rails server
+```

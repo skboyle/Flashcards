@@ -1,4 +1,35 @@
-<div>
-  <h1 class="font-bold text-4xl">Decks#index</h1>
-  <p>Find me in app/views/decks/index.html.erb</p>
+<div class="max-w-6xl mx-auto p-6 bg-gray-50">
+
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold text-green-800">My Decks</h1>
+    <%= link_to "Create Deck", new_deck_path, class: "px-4 py-2 bg-green-300 hover:bg-green-400 rounded ml-4" %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <% @decks.each do |deck| %>
+      <div class="p-4 bg-white shadow rounded flex flex-col justify-between">
+        <div>
+          <h2 class="text-xl font-bold mb-2"><%= deck.name %></h2>
+          <p class="mb-4"><%= deck.description %></p>
+        </div>
+
+        <div class="flex space-x-2 mt-2">
+          <%= button_to "Study",
+                deck_quiz_attempts_path(deck),
+                method: :post,
+                data: { turbo: false },
+                class: "flex-1 px-4 py-2 bg-green-300 hover:bg-green-400 rounded text-center" %>
+
+          <%= link_to "Edit", edit_deck_path(deck),
+                class: "flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-center" %>
+
+          <%= button_to "Delete", deck_path(deck),
+                method: :delete,
+                data: { confirm: "Are you sure?" },
+                class: "flex-1 px-4 py-2 bg-red-200 hover:bg-red-300 rounded text-center" %>
+
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>
